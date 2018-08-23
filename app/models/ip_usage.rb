@@ -1,0 +1,2 @@
+class IpUsage < ApplicationRecord
+end
