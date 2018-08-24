@@ -1,3 +1,4 @@
 en:
   errors:
-    ip?: "has wrong IPv4 format"
+    ip?: 'has wrong IPv4 format'
+    post: 'wrong id of Post passed'
