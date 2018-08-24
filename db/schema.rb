@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2018_08_23_144300) do
     t.string "login", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["login"], name: "index_users_on_login"
   end
 
   add_foreign_key "posts", "users"
