@@ -1,6 +1,4 @@
-class RankCreator
-  extend Dry::Initializer
-
+class RankCreator < ApplicationService
   attr_reader :avg_rank
 
   option :post_id, default: -> { '' }
@@ -10,21 +8,17 @@ class RankCreator
     configure { config.messages_file = 'config/locales/errors.yml' }
 
     required(:post_id).filled
-    required(:rank).filled(:int?, gteq?: 1, lteq?: 5)
+    required(:rank).filled(:int?, gteq?: Rank::MIN_RANK, lteq?: Rank::MAX_RANK)
 
     validate(post: :post_id) { |post_id| Post.exists?(post_id) }
   end
 
   def create_rank
-    return false unless validator.success?
+    return false unless valid?
 
     _create_rank
 
     true
-  end
-
-  def errors
-    validator.messages
   end
 
   private

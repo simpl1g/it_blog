@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_23_144300) do
+ActiveRecord::Schema.define(version: 2018_08_24_140911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "ip_usages", force: :cascade do |t|
-    t.inet "ip", null: false
+    t.string "ip", null: false
     t.text "used_by", default: [], null: false, array: true
     t.index "array_upper(used_by, 1)", name: "ip_used_by_length"
     t.index ["ip"], name: "index_ip_usages_on_ip"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 2018_08_23_144300) do
     t.integer "ranks_sum", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "(((ranks_sum)::numeric / (ranks_count)::numeric))", name: "posts_average_rank", where: "(ranks_count > 0)"
+    t.index ["ranks_count"], name: "counter"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

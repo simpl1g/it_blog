@@ -1,6 +1,4 @@
-class PostCreator
-  extend Dry::Initializer
-
+class PostCreator < ApplicationService
   attr_reader :post
 
   option :title, default: -> { '' }
@@ -26,15 +24,11 @@ class PostCreator
   end
 
   def create_post
-    return false unless validator.success?
+    return false unless valid?
 
     _create_post
 
     true
-  end
-
-  def errors
-    validator.messages
   end
 
   private
