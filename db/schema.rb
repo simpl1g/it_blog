@@ -24,15 +24,14 @@ ActiveRecord::Schema.define(version: 2018_08_24_140911) do
 
   create_table "posts", force: :cascade do |t|
     t.bigint "user_id"
+    t.string "ip", null: false
     t.string "title", null: false
     t.text "body", null: false
-    t.inet "ip", null: false
     t.integer "ranks_count", default: 0, null: false
     t.integer "ranks_sum", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index "(((ranks_sum)::numeric / (ranks_count)::numeric))", name: "posts_average_rank", where: "(ranks_count > 0)"
-    t.index ["ranks_count"], name: "counter"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
