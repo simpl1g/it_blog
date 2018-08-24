@@ -6,12 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# users = User.create!(Array.new(100) { { login: Faker::Internet.username } })
-# ips = 50.times.map { Faker::Internet.ip_v4_address }
-# Post.create!(
-#   Array.new(200_000) { { user: users.sample, ip: ips.sample, title: Faker::Book.title, body: Faker::Lorem.paragraph } }
-# )
+logins = Array.new(100) { Faker::Internet.username }
+ips = Array.new(50) { Faker::Internet.ip_v4_address }
 
-logins = User.pluck(:login)
-ips = Post.select("DISTINCT ip").map(&:ip).map(&:to_s)
-ips.take(30).each { |ip| IpUsage.create!(ip: ip, used_by: logins.sample(rand(50))) }
+200_000.times do
+  PostCreator.new(login: logins.sample, ip: ips.sample, title: Faker::Book.title, body: Faker::Lorem.paragraph).create_post
+end
+
+min_post_id = Post.minimum(:id)
+max_post_id = Post.maximum(:id)
+
+200_000.times do
+  RankCreator.new(post_id: rand(min_post_id..max_post_id), rank: rand(1..5)).create_rank
+end
